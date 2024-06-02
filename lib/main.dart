@@ -34,17 +34,6 @@ class MyApp extends StatelessWidget {
         cardColor: Colors.white,
       ),
       home: MainPage(),
-      // StreamBuilder<User?>(
-      //   stream: FirebaseAuth.instance.authStateChanges(),
-      //   builder: (context, snapshot) {
-      //     if (snapshot.hasData) {
-      //       return MyHomePage();
-      //     }
-      //     else{
-      //       return LoginScreen();
-      //     }
-      //   }
-      // ),
       routes: {
         '/completeData':(context) => CompleteDataScreen(),
         '/home': (context) => MyHomePage(),
@@ -70,7 +59,6 @@ class MainPage extends StatelessWidget {
       {
         return LoginScreen();
       }
-
     }
     )
  );

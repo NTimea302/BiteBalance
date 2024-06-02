@@ -12,7 +12,20 @@
           "package_name": "com.example.bite_balance"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "348427905266-05o6p7t13ttnhjkv1a7qlhjl0epk5vsu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bite_balance",
+            "certificate_hash": "478b0eeeddf3abc027d8360aafd3af0bce4a2f55"
+          }
+        },
+        {
+          "client_id": "348427905266-4mv3oi7c4u3jl9vf71lfttvauc4m73k9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDSBaYWihQuFSE-voWs6oUZXI26qN7ijf8"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "348427905266-4mv3oi7c4u3jl9vf71lfttvauc4m73k9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

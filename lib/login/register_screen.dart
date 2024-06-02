@@ -1,11 +1,15 @@
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:namer_app/UI/custom_dialog.dart';
 import 'package:namer_app/globals.dart';
 import 'package:namer_app/login/input_field.dart';
 import 'package:http/http.dart' as http;
+import 'auth_service.dart';
 
 class RegisterScreen extends StatelessWidget {
+  final _auth = AuthService();
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
@@ -141,44 +145,51 @@ class RegisterScreen extends StatelessWidget {
       );
     } else {
       print("Registering user...");
-      final url = Uri.parse('http://192.168.0.103:3000/userreg');
-
-      final response = await http.post(
-        url,
-        body: {
-          'email': emailController.text,
-          'password': passwordController.text,
-        },
-      );
-
-      if (response.statusCode == 200) {
+     final user =
+        await _auth.createUserWithEmailAndPassword(emailController.text, passwordController.text);
+      if (user != null) {
         print('User registered successfully');
-        print('Response: ${response.body}');
-        final decodedResponse = json.decode(response.body);
-        final userID = decodedResponse['userID'];
-        print('User ID: $userID');
-        final userId = userID.toString();
-        // SharedPreferences prefs = await SharedPreferences.getInstance();
-        // await prefs.setString('userId', userId);
-        setUserID(int.parse(userId));
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return CustomDialog(
-              title: 'Success',
-              message: 'User registered successfully',
-              buttons: [
-                ButtonData(
-                    text: 'Ok',
-                    onPressed: (bool value) {
-                      Navigator.pushNamed(context, '/completeData');
-                    })
-              ],
-            );
-          },
-        );
-      } else {
-        print('Error registering user: ${response.body}');
+        Navigator.pushNamed(context, '/completeData');
+      }
+      
+      // final url = Uri.parse('http://192.168.0.103:3000/userreg');
+
+      // final response = await http.post(
+      //   url,
+      //   body: {
+      //     'email': emailController.text,
+      //     'password': passwordController.text,
+      //   },
+      // );
+
+      // if (response.statusCode == 200) {
+      //   print('User registered successfully');
+      //   print('Response: ${response.body}');
+      //   final decodedResponse = json.decode(response.body);
+      //   final userID = decodedResponse['userID'];
+      //   print('User ID: $userID');
+      //   final userId = userID.toString();
+      //   // SharedPreferences prefs = await SharedPreferences.getInstance();
+      //   // await prefs.setString('userId', userId);
+      //   setUserID(int.parse(userId));
+      //   showDialog(
+      //     context: context,
+      //     builder: (BuildContext context) {
+      //       return CustomDialog(
+      //         title: 'Success',
+      //         message: 'User registered successfully',
+      //         buttons: [
+      //           ButtonData(
+      //               text: 'Ok',
+      //               onPressed: (bool value) {
+      //                 Navigator.pushNamed(context, '/completeData');
+      //               })
+      //         ],
+      //       );
+      //     },
+      //   );
+      else {
+        print('Error registering user');
         showDialog(
           context: context,
           builder: (BuildContext context) {

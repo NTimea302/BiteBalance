@@ -7,8 +7,11 @@ import 'package:namer_app/login/input_field.dart';
 import 'package:http/http.dart' as http;
 import '../UI/show_my_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'auth_service.dart';
 
 class LoginScreen extends StatelessWidget {
+  final _auth = AuthService();
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -46,6 +49,34 @@ class LoginScreen extends StatelessWidget {
               onPressed: () => loginUser(context),
               child: Text('Login'),
             ),
+            SizedBox(height: 10),
+            Text("OR Log in with"),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () async {
+                print('Google login');
+                await _auth.loginWithGoogle();
+                print('Google login done');
+                Navigator.pushNamed(context, '/home');
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromARGB(255, 250, 250, 250),
+              ),
+              child: 
+              SizedBox( 
+                width: 45,
+                child: Row(
+                  children: [
+                    Text('G', style: TextStyle(color: Colors.blue)),
+                    Text('o', style: TextStyle(color: Colors.red)),
+                    Text('o', style: TextStyle(color: Color.fromARGB(255, 255, 225, 0), fontWeight: FontWeight.bold)),
+                    Text('g', style: TextStyle(color: Colors.green)),
+                    Text('l', style: TextStyle(color: Colors.blue)),
+                    Text('e', style: TextStyle(color: Colors.red)),
+                  ],
+                ),
+              ),
+            ),
             SizedBox(height: 16),
             Text("Don't have an account?"),
             TextButton(
@@ -65,23 +96,22 @@ class LoginScreen extends StatelessWidget {
 
   void loginUser(BuildContext context) async {
     print('Login user');
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: emailController.text.trim(),
-      password: passwordController.text.trim(),
-    ).then((value) {
-      print('Login successful');
-      //setUserID(value.user!.uid);
-      initializeGlobals();
+    final user =
+        await _auth.loginUserWithEmailAndPassword(emailController.text, passwordController.text);
+    if (user != null) {
+      print("User Logged In");
       Navigator.pushNamed(context, '/home');
-    }).catchError((error) {
-      print('Error: $error');
+    }
+    else {
+      print("User not logged in");
       showMyDialog(
         context,
-        'Error occured',
+        'Invalid email or password',
         'Please try again',
         [ButtonData(text: "Ok")],
       );
-    });
+    }
+
   //   final url = Uri.parse('http://192.168.0.103:3000/userlogin');
   //   final response = await http.post(
   //     url,

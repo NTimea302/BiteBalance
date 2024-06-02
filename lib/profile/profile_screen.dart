@@ -8,6 +8,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:image_picker/image_picker.dart';
 import '../UI/show_my_dialog.dart';
+import 'package:namer_app/login/auth_service.dart';
+
 
 Future<List<dynamic>> fetchData() async {
   //SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -43,6 +45,8 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final _auth = AuthService();
+
   bool enabled = true;
   String displayFitnessGoal = '';
   String displayActivityLevel = '';
@@ -170,9 +174,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           PopupMenuButton<String>(
                             icon: Icon(Icons.settings,
                                 color: Colors.black87, size: 30),
-                            onSelected: (String result) {
+                            onSelected: (String result) async {
                               switch (result) {
                                 case 'Setting 1':
+                                  await _auth.signout();
                                   resetGlobals();
                                   Navigator.pushNamed(context, '/login');
                                 case 'Setting 2':
