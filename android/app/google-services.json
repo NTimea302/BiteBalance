@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "348427905266",
+    "project_id": "bbauth-cd80b",
+    "storage_bucket": "bbauth-cd80b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:348427905266:android:c80ee7c87db93a71f2c86b",
+        "android_client_info": {
+          "package_name": "com.example.bite_balance"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSBaYWihQuFSE-voWs6oUZXI26qN7ijf8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
