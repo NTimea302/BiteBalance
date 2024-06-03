@@ -39,6 +39,7 @@ flutter:
     - assets/glass.png
     - assets/bell.png
     - assets/bottle.png
+    - assets/image.png
   
 flutter_launcher_icons:
   android: "launcher_icon"

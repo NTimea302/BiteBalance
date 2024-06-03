@@ -10,7 +10,10 @@ import 'package:namer_app/history_screen.dart';
 import 'package:namer_app/settings_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-void main() async{
+import 'login/forgot_screen.dart';
+import 'login/verification_screen.dart';
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
@@ -26,7 +29,10 @@ class MyApp extends StatelessWidget {
       title: 'Bite Balance',
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lime, secondary: Colors.lightGreen, error: Colors.red),
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.lime,
+            secondary: Colors.lightGreen,
+            error: Colors.red),
         scaffoldBackgroundColor: Colors.white,
         popupMenuTheme: PopupMenuThemeData(
           color: Colors.white,
@@ -35,11 +41,13 @@ class MyApp extends StatelessWidget {
       ),
       home: MainPage(),
       routes: {
-        '/completeData':(context) => CompleteDataScreen(),
+        '/completeData': (context) => CompleteDataScreen(),
         '/home': (context) => MyHomePage(),
         '/login': (context) => LoginScreen(),
         '/register': (context) => RegisterScreen(),
         '/settings': (context) => SettingsScreen(),
+        '/main': (context) => MainPage(),
+        '/forgotPassword': (context) => ForgotScreen(),
       },
       debugShowCheckedModeBanner: false,
     );
@@ -47,21 +55,19 @@ class MyApp extends StatelessWidget {
 }
 
 class MainPage extends StatelessWidget {
-@override
- Widget build(BuildContext context) => Scaffold(
-  body: StreamBuilder<User?>(
-    stream: FirebaseAuth.instance.authStateChanges(),
-    builder: (context, snapshot){
-      if (snapshot.hasData){
-        return MyHomePage();
-      }
-      else
-      {
-        return LoginScreen();
-      }
-    }
-    )
- );
+  @override
+  Widget build(BuildContext context) => Scaffold(
+      body: StreamBuilder<User?>(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return LoginScreen();
+            } else if (snapshot.data?.emailVerified == true) {
+              return MyHomePage();
+            } else {
+              return VerificationScreen();
+            }
+          }));
 }
 
 class MyHomePage extends StatefulWidget {
@@ -92,56 +98,55 @@ class _MyHomePageState extends State<MyHomePage> {
           //color: Theme.of(context).colorScheme.shadow,
           child: page,
         ),
-            bottomNavigationBar: Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.black12.withOpacity(0.05),
-                  width: 1.0,
-                ),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-                child: BottomNavigationBar(
-                  items: const <BottomNavigationBarItem>[
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.history_outlined),
-                      label: 'History',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.apple_outlined),
-                      label: 'Home',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.person_outlined),
-                      label: 'Profile',
-                    ),
-                  ],
-                  currentIndex: selectedIndex,
-                  backgroundColor: Colors.white,
-                  selectedItemColor: Colors.black,
-                  unselectedItemColor: Colors.grey,
-                  onTap: (value) {
-                    setState(() {
-                      selectedIndex = value;
-                    });
-                  },
-                  showUnselectedLabels: false,
-                  type: BottomNavigationBarType.fixed,
-                ),
-              ),
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.black12.withOpacity(0.05),
+              width: 1.0,
             ),
-          );
-        });
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+            child: BottomNavigationBar(
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.history_outlined),
+                  label: 'History',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.apple_outlined),
+                  label: 'Home',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person_outlined),
+                  label: 'Profile',
+                ),
+              ],
+              currentIndex: selectedIndex,
+              backgroundColor: Colors.white,
+              selectedItemColor: Colors.black,
+              unselectedItemColor: Colors.grey,
+              onTap: (value) {
+                setState(() {
+                  selectedIndex = value;
+                });
+              },
+              showUnselectedLabels: false,
+              type: BottomNavigationBarType.fixed,
+            ),
+          ),
+        ),
+      );
+    });
   }
 }
-
 
 class HexColor extends Color {
   HexColor(final String hexColor) : super(_getColorFromHex(hexColor));

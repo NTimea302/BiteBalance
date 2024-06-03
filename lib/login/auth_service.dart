@@ -6,6 +6,29 @@ import 'package:google_sign_in/google_sign_in.dart';
 class AuthService {
   final _auth = FirebaseAuth.instance;
 
+  Future<void> sendPasswordResetLink(String email) async {
+    try {
+        await _auth.sendPasswordResetEmail(email: email);
+        print("Password reset link sent to ${email}");
+    } catch (e) {
+      print("Something went wrong");
+    }
+  }
+
+  Future<void> sendEmailVerificationLink() async {
+    try {
+      final user = _auth.currentUser;
+      if (user != null) {
+        await user.sendEmailVerification();
+        print("Email verification link sent to ${user.email}");
+      } else {
+        print("User not found");
+      }
+    } catch (e) {
+      print("Something went wrong");
+    }
+  }
+
   Future<UserCredential?> loginWithGoogle() async {
     try {
       print("Login with Google");

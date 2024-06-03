@@ -44,15 +44,23 @@ class LoginScreen extends StatelessWidget {
                 infoText: "Enter password!",
                 icon: Icon(Icons.lock),
                 obscureText: true),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/forgotPassword');
+                },
+                child: Text('Forgot password?'),
+              ),
+            ),
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: () => loginUser(context),
               child: Text('Login'),
             ),
             SizedBox(height: 10),
-            Text("OR Log in with"),
             SizedBox(height: 10),
-            ElevatedButton(
+            TextButton(
               onPressed: () async {
                 print('Google login');
                 await _auth.loginWithGoogle();
@@ -60,21 +68,29 @@ class LoginScreen extends StatelessWidget {
                 Navigator.pushNamed(context, '/home');
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(255, 250, 250, 250),
+                padding: EdgeInsets.zero,
+                backgroundColor:
+                    Colors.transparent, // Set background color to transparent
               ),
-              child: 
-              SizedBox( 
-                width: 45,
-                child: Row(
-                  children: [
-                    Text('G', style: TextStyle(color: Colors.blue)),
-                    Text('o', style: TextStyle(color: Colors.red)),
-                    Text('o', style: TextStyle(color: Color.fromARGB(255, 255, 225, 0), fontWeight: FontWeight.bold)),
-                    Text('g', style: TextStyle(color: Colors.green)),
-                    Text('l', style: TextStyle(color: Colors.blue)),
-                    Text('e', style: TextStyle(color: Colors.red)),
-                  ],
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/image.png',
+                    width: 50,
+                    height: 50,
+                  ),
+                  Text("  or log in with "),
+                  Text('G', style: TextStyle(color: Colors.blue)),
+                  Text('o', style: TextStyle(color: Colors.red)),
+                  Text('o',
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 255, 225, 0),
+                          fontWeight: FontWeight.bold)),
+                  Text('g', style: TextStyle(color: Colors.green)),
+                  Text('l', style: TextStyle(color: Colors.blue)),
+                  Text('e', style: TextStyle(color: Colors.red)),
+                ],
               ),
             ),
             SizedBox(height: 16),
@@ -96,13 +112,12 @@ class LoginScreen extends StatelessWidget {
 
   void loginUser(BuildContext context) async {
     print('Login user');
-    final user =
-        await _auth.loginUserWithEmailAndPassword(emailController.text, passwordController.text);
+    final user = await _auth.loginUserWithEmailAndPassword(
+        emailController.text, passwordController.text);
     if (user != null) {
       print("User Logged In");
       Navigator.pushNamed(context, '/home');
-    }
-    else {
+    } else {
       print("User not logged in");
       showMyDialog(
         context,
@@ -112,42 +127,42 @@ class LoginScreen extends StatelessWidget {
       );
     }
 
-  //   final url = Uri.parse('http://192.168.0.103:3000/userlogin');
-  //   final response = await http.post(
-  //     url,
-  //     body: {
-  //       'email': emailController.text,
-  //       'password': passwordController.text,
-  //     },
-  //   );
-  //   print('Response status: ${response.body}');
-  //   Map<String, dynamic> responseData = jsonDecode(response.body);
-  //   String userId = responseData['userID'].toString();
-  //   print('User ID: $userId');
+    //   final url = Uri.parse('http://192.168.0.103:3000/userlogin');
+    //   final response = await http.post(
+    //     url,
+    //     body: {
+    //       'email': emailController.text,
+    //       'password': passwordController.text,
+    //     },
+    //   );
+    //   print('Response status: ${response.body}');
+    //   Map<String, dynamic> responseData = jsonDecode(response.body);
+    //   String userId = responseData['userID'].toString();
+    //   print('User ID: $userId');
 
-  //   if (response.statusCode == 200) {
-  //     // Login successful
-  //     print('Login successful');
-  //     setUserID(int.parse(userId));
-  //     initializeGlobals();
-  //     Navigator.pushNamed(context, '/home');
-  //   }
-  //   else if (response.statusCode == 401) {
-  //     print('Invalid email or password');
-  //     showMyDialog(
-  //       context,
-  //       'Invalid email or password',
-  //       'Please try again',
-  //       [ButtonData(text: "Ok")],
-  //     );
-  //   } else {
-  //     showMyDialog(
-  //       context,
-  //       'Error occured',
-  //       'Please try again',
-  //       [ButtonData(text: "Ok")],
-  //     );
-  //     print('Error: ${response.body}');
-  //   }
-   }
+    //   if (response.statusCode == 200) {
+    //     // Login successful
+    //     print('Login successful');
+    //     setUserID(int.parse(userId));
+    //     initializeGlobals();
+    //     Navigator.pushNamed(context, '/home');
+    //   }
+    //   else if (response.statusCode == 401) {
+    //     print('Invalid email or password');
+    //     showMyDialog(
+    //       context,
+    //       'Invalid email or password',
+    //       'Please try again',
+    //       [ButtonData(text: "Ok")],
+    //     );
+    //   } else {
+    //     showMyDialog(
+    //       context,
+    //       'Error occured',
+    //       'Please try again',
+    //       [ButtonData(text: "Ok")],
+    //     );
+    //     print('Error: ${response.body}');
+    //   }
+  }
 }
