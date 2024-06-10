@@ -8,9 +8,12 @@ import 'package:http/http.dart' as http;
 import '../UI/show_my_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'auth_service.dart';
+import 'package:namer_app/database_service.dart';
+import 'package:namer_app/models/person.dart';
 
 class LoginScreen extends StatelessWidget {
   final _auth = AuthService();
+  final _dbService = DatabaseService();
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -53,12 +56,10 @@ class LoginScreen extends StatelessWidget {
                 child: Text('Forgot password?'),
               ),
             ),
-            SizedBox(height: 16),
             ElevatedButton(
               onPressed: () => loginUser(context),
               child: Text('Login'),
             ),
-            SizedBox(height: 10),
             SizedBox(height: 10),
             TextButton(
               onPressed: () async {
@@ -77,10 +78,10 @@ class LoginScreen extends StatelessWidget {
                 children: [
                   Image.asset(
                     'assets/image.png',
-                    width: 50,
-                    height: 50,
+                    width: 40,
+                    height: 40,
                   ),
-                  Text("  or log in with "),
+                  Text("  log in with "),
                   Text('G', style: TextStyle(color: Colors.blue)),
                   Text('o', style: TextStyle(color: Colors.red)),
                   Text('o',

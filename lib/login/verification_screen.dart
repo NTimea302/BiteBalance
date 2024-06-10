@@ -52,7 +52,13 @@ class _VerificationScreenState extends State<VerificationScreen> {
               },
               child: Text('Resend verification email'),
             ),
-            SizedBox(height: 10)
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () async {
+                _auth.signout();
+              },
+              child: Text('Continue with another account'),
+            ),
           ],
         ),
       ),

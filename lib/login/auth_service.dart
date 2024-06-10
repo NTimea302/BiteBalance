@@ -1,10 +1,14 @@
-//import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
   final _auth = FirebaseAuth.instance;
+
+  String? getUser() {
+    final User? user = _auth.currentUser;
+    final uid = user?.uid;
+    return uid;
+  }
 
   Future<void> sendPasswordResetLink(String email) async {
     try {

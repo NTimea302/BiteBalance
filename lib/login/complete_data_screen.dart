@@ -4,15 +4,19 @@ import 'package:namer_app/login/input_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:namer_app/login/auth_service.dart';
 
-Future<void> updateUser(String userID, String firstName, String lastName, int height, int weightCurrent, int weightGoal, int fitnessGoal, int calorieIntake, String birthday, String gender, int activityLevel) async {
+Future<void> updateUser(String firebaseUserID, String firstName, String lastName, String height, String weightCurrent, String weightGoal, String fitnessGoal, String calorieIntake, String birthday, String gender, String activityLevel) async {
+  print('FLUTTER: userupdate START!!!!!!!!!!!!');    
+  print('User ID: $userID');
+  print('Updating user with data: $firebaseUserID, $firstName, $lastName, $height, $weightCurrent, $weightGoal, $fitnessGoal, $calorieIntake, $birthday, $gender, $activityLevel');
   final response = await http.put(
-    Uri.parse('http://192.168.0.103:3000/userupdate'),
+    Uri.parse('http://192.168.0.102:3000/userupdate'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
     body: jsonEncode(<String, dynamic>{
-      'userID': userID,
+      'firebaseUserID': firebaseUserID,
       'firstName': firstName,
       'lastName': lastName,
       'height': height,
@@ -24,19 +28,20 @@ Future<void> updateUser(String userID, String firstName, String lastName, int he
       'gender': gender,
       'activityLevel': activityLevel,
       'proteinIntake': 150,
-      'carbIntake': 250,
+      'carbsIntake': 250,
       'fatIntake': 80,
       'sugarIntake': 50,
       'fiberIntake': 30,
     }),
   );
-
+  print('Response of complete data screen: ${response.body}');
   if (response.statusCode == 200) {
-    print('Response of complete data screen: ${response.body}');
     print('User updated successfully');
+    
   } else {
     throw Exception('Failed to update user');
   }
+  print('FLUTTER: userupdate STOP!!!!!!!!!!!!');    
 }
 
 enum Gender { male, female }
@@ -47,6 +52,8 @@ class CompleteDataScreen extends StatefulWidget {
 }
 
 class _CompleteDataScreenState extends State<CompleteDataScreen> {
+  final _auth = AuthService();
+
   Gender? _gender = Gender.male;
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
@@ -67,9 +74,10 @@ class _CompleteDataScreenState extends State<CompleteDataScreen> {
       builder:
           (BuildContext context, AsyncSnapshot<SharedPreferences> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          String userId = userID.toString();
-          print('User ID from SP: $userId');
+          // String userId = userID.toString();
+          // print('User ID from SP: $userId');
           //String fitnessGoal;
+          String? firebaseUserId = _auth.getUser();
           return Scaffold(
             body: SingleChildScrollView(
               child: Center(
@@ -350,15 +358,15 @@ class _CompleteDataScreenState extends State<CompleteDataScreen> {
                       ),
                       SizedBox(height: 20),
                       ElevatedButton(
-                        onPressed: () => {
-                          //print(dropdown2Value),
-                          updateUser(userId, firstNameController.text,
-                              lastNameController.text, int.parse(heightController.text),
-                              int.parse(weightController.text),
-                              int.parse(desiredWeightController.text),
-                              dropdownValue == 'Loose weight' ? 1 : dropdownValue == 'Gain weight' ? 2 : dropdownValue == 'Get toned' ? 3 : dropdownValue == 'Get fit' ? 4 : 5,
-                              2000, birthdayController.text, 'F'
-                              , dropdown2Value == 'Sedentary' ? 1 : dropdown2Value == 'Light' ? 2 : dropdown2Value == 'Moderate' ? 3 : dropdown2Value == 'Active' ? 4 : 5),
+                        onPressed: () async => {
+                          print('Firebase user ID: $firebaseUserId'),
+                          await updateUser(firebaseUserId!, firstNameController.text,
+                              lastNameController.text, heightController.text,
+                              weightController.text,
+                              desiredWeightController.text,
+                              dropdownValue == 'Loose weight' ? '1' : dropdownValue == 'Gain weight' ? '2' : dropdownValue == 'Get toned' ? '3' : dropdownValue == 'Get fit' ? '4' : '5',
+                              '2000', birthdayController.text, 'F'
+                              , (dropdown2Value == 'Sedentary' ? '1' : dropdown2Value == 'Light' ? '2' : dropdown2Value == 'Moderate' ? '3' : dropdown2Value == 'Active' ? '4' : '5')),
                           Navigator.pushNamed(context, '/home'),
                         },
                         style: ElevatedButton.styleFrom(

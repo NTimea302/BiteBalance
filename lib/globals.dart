@@ -6,7 +6,10 @@ int calorieIntake = 0; // The user's daily calorie intake calculated from the us
 int userID = 0;
 int personalGoal = 0;
 
-void initializeGlobals() async {
+Future<int> initializeGlobals(String firebaseUserID) async {
+  print('Initializing globals');
+  userID = await getUserID(firebaseUserID);
+  print('User ID initialise globals fcn: $userID');
   var data = await getUserData();
   if (data.isNotEmpty) {
     calorieIntake = data[0]['calorieIntake'];
@@ -14,6 +17,25 @@ void initializeGlobals() async {
     print('Globals initialized');
     print('Calorie intake: $calorieIntake');
     print('User ID: $userID');
+  }
+  return userID;
+}
+
+Future<int> getUserID(String firebaseUserID) async {
+  print('Getting user ID from globals.dart');
+  final response = await http.get(Uri.parse('http://192.168.0.102:3000/uidfromfuid/$firebaseUserID'));
+
+  //print('Response status: ${response.statusCode}');
+  //print('Response body: ${response.body}');
+  if (response.statusCode == 200) {
+    var data = jsonDecode(response.body);
+    int userID = data[0]['userID'];
+    print('User ID: $userID');
+    return userID;
+  } else {
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+    throw Exception('Failed to get user ID');
   }
 }
 
@@ -42,7 +64,7 @@ void setUserID(int id) {
 Future<List<dynamic>> getUserData() async {
   print('Getting user data from globals.dart');
   String userId = userID.toString();
-  final response = await http.get(Uri.parse('http://192.168.0.103:3000/$userId'));
+  final response = await http.get(Uri.parse('http://192.168.0.102:3000/$userId'));
 
   if (response.statusCode == 200) {
     var data = jsonDecode(response.body);

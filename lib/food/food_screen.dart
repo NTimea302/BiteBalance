@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:namer_app/database_service.dart';
 import 'package:namer_app/food/consumed_kcal_view.dart';
 import 'package:http/http.dart' as http;
 import 'package:namer_app/food/water_view.dart';
@@ -9,14 +10,17 @@ final TextEditingController foodController = TextEditingController();
 const apiKey = "PllGHxA8jt8cpAXS82CTY49TgnQPReT4tpPhUTLj";
 var query = foodController.text;
 String finalMealType = 'Snack';
+final _dbService = DatabaseService();
 
 Future<List<dynamic>> requestTodaysNutrition() async {
   //SharedPreferences prefs = await SharedPreferences.getInstance();
+
   String userId = userID.toString();
+  print('User ID: $userId');
   String date = DateTime.now().toString();
 
   print('Requesting today\'s nutrition...');
-  String url = 'http://192.168.0.103:3000/nutrients/$userId/$date';
+  String url = 'http://192.168.0.102:3000/nutrients/$userId/$date';
   final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
@@ -104,7 +108,7 @@ void addToDatabase() async {
       'fiber_g': responseData['items'][0]['fiber_g']?.toString() ?? '0',
       'sugar_g': responseData['items'][0]['sugar_g']?.toString() ?? '0',
     };
-    final url = Uri.parse('http://192.168.0.103:3000/meal');
+    final url = Uri.parse('http://192.168.0.102:3000/meal');
     final response2 = await http.post(
       url,
       body: mealData,
@@ -136,7 +140,7 @@ Future<String> updateTodaysNutrition(Map<String, dynamic> newValues) async {
 
   print('Updating today\'s nutrition...');
   print('New values: $newValues');
-  String url = 'http://192.168.0.103:3000/nutrientss/$userId/$date';
+  String url = 'http://192.168.0.102:3000/nutrientss/$userId/$date';
   final response = await http.put(
     Uri.parse(url),
     headers: <String, String>{
@@ -243,6 +247,7 @@ class _FoodScreenState extends State<FoodScreen> {
           //   height: 310,
           //   child: ConsumedKcalView(),
           // ),
+          //Text(_dbService.read()),
           ConsumedKcalView(),
           WaterView(),
         ],

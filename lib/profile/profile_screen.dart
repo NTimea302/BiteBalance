@@ -17,7 +17,7 @@ Future<List<dynamic>> fetchData() async {
 
   print('Making request...');
   final response =
-      await http.get(Uri.parse('http://192.168.0.103:3000/$userId'));
+      await http.get(Uri.parse('http://192.168.0.102:3000/$userId'));
 
   //print('Response status: ${response.statusCode}');
   print('Response body: ${response.body}');
