@@ -64,9 +64,13 @@ class LoginScreen extends StatelessWidget {
             TextButton(
               onPressed: () async {
                 print('Google login');
-                await _auth.loginWithGoogle();
+                bool firstTimeUser = await _auth.loginWithGoogle();
                 print('Google login done');
-                Navigator.pushNamed(context, '/home');
+                if (firstTimeUser) {
+                  Navigator.pushNamed(context, '/completeData');
+                } else {
+                  Navigator.pushNamed(context, '/home');
+                }
               },
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.zero,

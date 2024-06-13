@@ -33,7 +33,7 @@ class AuthService {
     }
   }
 
-  Future<UserCredential?> loginWithGoogle() async {
+  Future<bool> loginWithGoogle() async {
     try {
       print("Login with Google");
       final googleUser = await GoogleSignIn().signIn();
@@ -41,12 +41,21 @@ class AuthService {
       final credential = GoogleAuthProvider.credential(
           accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
       print("User: ${googleUser?.displayName}");
-      return await _auth.signInWithCredential(credential);
-     
+      final userCredential = await _auth.signInWithCredential(credential);
+
+      
+      if (userCredential.additionalUserInfo?.isNewUser == true) {
+        print("First time login");
+        return true;
+      } else {
+        print("Returning user");
+        return false;
+      }
+      
     } catch (e) {
       print("Something went wrong");
     }
-    return null;
+    return false;
   }
 
   Future<User?> createUserWithEmailAndPassword(

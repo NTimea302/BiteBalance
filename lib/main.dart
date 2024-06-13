@@ -62,26 +62,23 @@ class MainPage extends StatelessWidget {
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return LoginScreen();
-            } else 
-            if (snapshot.data?.emailVerified == true) {
-              print('User is verified');
+            } else if (snapshot.data?.emailVerified == false) {
+              return VerificationScreen();
+            } else {
               String firebaseUserID = snapshot.data!.uid;
+              print('Firebase user ID: $firebaseUserID');
               return FutureBuilder(
-                future: initializeGlobals(firebaseUserID),
+                future: getUserID(firebaseUserID),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
                       child: CircularProgressIndicator(),
                     );
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
                   } else {
                     return MyHomePage();
                   }
                 },
               );
-            } else {
-              return VerificationScreen();
             }
           }));
 }

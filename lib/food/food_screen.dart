@@ -16,7 +16,7 @@ Future<List<dynamic>> requestTodaysNutrition() async {
   //SharedPreferences prefs = await SharedPreferences.getInstance();
 
   String userId = userID.toString();
-  print('User ID: $userId');
+  print('User ID (requestTodaysNutrition): $userId');
   String date = DateTime.now().toString();
 
   print('Requesting today\'s nutrition...');
