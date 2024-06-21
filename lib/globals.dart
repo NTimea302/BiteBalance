@@ -23,7 +23,7 @@ Future<int> initializeGlobals(String firebaseUserID) async {
 Future<int> getUserID(String firebaseUserID) async {
   print('Getting user ID from globals.dart');
   final response = await http
-      .get(Uri.parse('http://192.168.0.102:3000/uidfromfuid/$firebaseUserID'));
+      .get(Uri.parse('http://192.168.0.100:3000/uidfromfuid/$firebaseUserID'));
   print("Got response");
   print('Response status: ${response.statusCode}');
   print('Response body: ${response.body}');
@@ -71,7 +71,7 @@ Future<List<dynamic>> getUserData() async {
   print('Getting user data from globals.dart');
   String userId = userID.toString();
   final response =
-      await http.get(Uri.parse('http://192.168.0.102:3000/$userId'));
+      await http.get(Uri.parse('http://192.168.0.100:3000/$userId'));
   print('Response status: ${response.statusCode}');
   print('Response body: ${response.body}');
 

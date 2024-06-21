@@ -11,7 +11,7 @@ Future<void> updateUser(String firebaseUserID, String firstName, String lastName
   print('User ID: $userID');
   print('Updating user with data: $firebaseUserID, $firstName, $lastName, $height, $weightCurrent, $weightGoal, $fitnessGoal, $calorieIntake, $birthday, $gender, $activityLevel');
   final response = await http.put(
-    Uri.parse('http://192.168.0.102:3000/userupdate'),
+    Uri.parse('http://192.168.0.100:3000/userupdate'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

@@ -20,7 +20,7 @@ Future<List<dynamic>> requestTodaysNutrition() async {
   String date = DateTime.now().toString();
 
   print('Requesting today\'s nutrition...');
-  String url = 'http://192.168.0.102:3000/nutrients/$userId/$date';
+  String url = 'http://192.168.0.100:3000/nutrients/$userId/$date';
   final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
@@ -108,7 +108,7 @@ void addToDatabase() async {
       'fiber_g': responseData['items'][0]['fiber_g']?.toString() ?? '0',
       'sugar_g': responseData['items'][0]['sugar_g']?.toString() ?? '0',
     };
-    final url = Uri.parse('http://192.168.0.102:3000/meal');
+    final url = Uri.parse('http://192.168.0.100:3000/meal');
     final response2 = await http.post(
       url,
       body: mealData,
@@ -140,7 +140,7 @@ Future<String> updateTodaysNutrition(Map<String, dynamic> newValues) async {
 
   print('Updating today\'s nutrition...');
   print('New values: $newValues');
-  String url = 'http://192.168.0.102:3000/nutrientss/$userId/$date';
+  String url = 'http://192.168.0.100:3000/nutrientss/$userId/$date';
   final response = await http.put(
     Uri.parse(url),
     headers: <String, String>{
@@ -157,8 +157,6 @@ Future<String> updateTodaysNutrition(Map<String, dynamic> newValues) async {
     throw Exception('Failed to update nutrition data');
   }
 }
-
-
 
 class MealTypeDropdown extends StatefulWidget {
   @override
@@ -243,11 +241,6 @@ class _FoodScreenState extends State<FoodScreen> {
               ),
             ),
           ),
-          // SizedBox(
-          //   height: 310,
-          //   child: ConsumedKcalView(),
-          // ),
-          //Text(_dbService.read()),
           ConsumedKcalView(),
           WaterView(),
         ],

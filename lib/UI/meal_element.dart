@@ -23,7 +23,7 @@ Future<List<dynamic>> fetchData(mealName, date) async {
   //print('Making request...');
   //DateTime date = DateTime.now();
   final response = await http.get(
-      Uri.parse('http://192.168.0.102:3000/meals/$userId/$mealNameID/$date'));
+      Uri.parse('http://192.168.0.100:3000/meals/$userId/$mealNameID/$date'));
 
   //print('Response status: ${response.statusCode}');
   print('Response body: ${response.body}');
@@ -55,7 +55,7 @@ Future<int> fetchConsumedCalories(mealName, date) async {
   }
 
   final response = await http.get(Uri.parse(
-      'http://192.168.0.102:3000/calories/$userId/$mealNameID/$date'));
+      'http://192.168.0.100:3000/calories/$userId/$mealNameID/$date'));
 
   //print('Response status: ${response.statusCode}');
   //print("Regi");
@@ -71,7 +71,7 @@ Future<int> fetchTotalCalories() async {
   String userId = userID.toString();
 
   final response = await http
-      .get(Uri.parse('http://192.168.0.102:3000/totalcalories/$userId'));
+      .get(Uri.parse('http://192.168.0.100:3000/totalcalories/$userId'));
 
   //print('Response status: ${response.statusCode}');
   //print("Uj");
@@ -84,7 +84,7 @@ Future<int> fetchTotalCalories() async {
 
 Future<void> deleteMeal(int mealID) async {
   final response = await http.delete(
-    Uri.parse('http://192.168.0.102:3000/meal/$mealID'),
+    Uri.parse('http://192.168.0.100:3000/meal/$mealID'),
   );
 
   if (response.statusCode == 200) {
